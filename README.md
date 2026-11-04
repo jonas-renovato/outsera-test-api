@@ -91,17 +91,20 @@ A solução utiliza Playwright, TypeScript e AJV para validar operações de aut
 
 ## Cenários cobertos
 
-Atualmente a suíte possui **18 cenários**:
+Atualmente a suíte possui **22 cenários**:
 
 | Domínio | Endpoint | Cobertura |
 |---|---|---|
-| Autenticação | `POST /auth/login` | Login válido; username, senha ou payload ausentes |
+| Autenticação | `POST /auth/login` | Login válido; credenciais inválidas; username, senha ou payload ausentes |
 | Usuários | `GET /users/:id` e `GET /users` | Usuário existente, inexistente, ID inválido e coleção |
-| Usuários | `POST /users/add` | Payload válido, vazio, parcial e com tipos incompatíveis |
+| Usuários | `POST /users/add` | Payload válido, vazio, parcial, incompatível e JSON malformado |
 | Usuários | `PUT /users/:id` | Atualização válida, recurso inexistente, payload vazio e tipos incompatíveis |
 | Usuários | `DELETE /users/:id` | Exclusão existente e recurso inexistente |
+| Usuários | `OPTIONS /users/:id` | Tentativa de uso de método não suportado |
 
-Todos validam status code, `content-type`, corpo e o schema correspondente.
+As respostas JSON validam status code, `content-type`, corpo e o schema
+correspondente. O cenário `OPTIONS` valida o status, a ausência de
+`content-type` e o corpo vazio retornados pela DummyJSON.
 As mutações são simuladas pela DummyJSON; os testes validam o comportamento
 documentado da API, sem assumir persistência entre execuções.
 

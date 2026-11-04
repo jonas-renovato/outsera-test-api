@@ -8,7 +8,10 @@ import { expect, test } from '../../../src/fixtures/api.fixture';
 import { expectJsonResponse } from '../../../src/helpers/response.helper';
 import { expectSchema } from '../../../src/helpers/schema.helper';
 
-async function expectLoginError(response: APIResponse): Promise<void> {
+async function expectLoginError(
+  response: APIResponse,
+  expectedMessage: string = authData.missingCredentialsMessage,
+): Promise<void> {
   await test.step('Assert - valida a resposta de erro do login', async () => {
     // Confirma que o payload incompleto é reportado como requisição inválida em JSON.
     expectJsonResponse(response, 400);
@@ -16,7 +19,7 @@ async function expectLoginError(response: APIResponse): Promise<void> {
     // Valida o contrato e a mensagem retornada pela DummyJSON.
     const body = (await response.json()) as LoginErrorResponse;
     expectSchema(body, 'loginError');
-    expect(body.message).toBe(authData.missingCredentialsMessage);
+    expect(body.message).toBe(expectedMessage);
   });
 }
 
@@ -34,6 +37,24 @@ test.describe('POST /auth/login', () => {
 
       expect(body.username).toBe(credentials.username);
     });
+  });
+
+  test('deve retornar erro ao autenticar com username inválido', async ({ authClient }) => {
+    const credentials = authData.invalidUsernameCredentials;
+
+    const response = await authClient.login(credentials);
+
+    // Assert: a DummyJSON rejeita o usuário inexistente com a mensagem de credenciais inválidas.
+    await expectLoginError(response, authData.invalidCredentialsMessage);
+  });
+
+  test('deve retornar erro ao autenticar com senha inválida', async ({ authClient }) => {
+    const credentials = authData.invalidPasswordCredentials;
+
+    const response = await authClient.login(credentials);
+
+    // Assert: a DummyJSON não diferencia username inválido de senha inválida na mensagem.
+    await expectLoginError(response, authData.invalidCredentialsMessage);
   });
 
   test('deve retornar erro ao autenticar sem senha', async ({ authClient }) => {

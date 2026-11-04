@@ -1,0 +1,32 @@
+{
+  "name": "outsera-test-api",
+  "version": "1.0.0",
+  "description": "API test automation framework with Playwright and TypeScript",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonas-renovato/outsera-test-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jonas-renovato/outsera-test-api/issues"
+  },
+  "homepage": "https://github.com/jonas-renovato/outsera-test-api#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "dotenv": "^18.0.9",
+    "typescript": "^7.0.2"
+  }
+}

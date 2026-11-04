@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "users",
+  "$defs": {
+    "user": {
+      "type": "object",
+      "required": ["id", "firstName", "lastName", "email", "image"],
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "image": { "type": "string", "format": "uri" }
+      }
+    },
+    "list": {
+      "type": "object",
+      "required": ["users", "total", "skip", "limit"],
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "firstName", "lastName", "email", "image"],
+            "properties": {
+              "id": { "type": "integer", "minimum": 1 },
+              "firstName": { "type": "string" },
+              "lastName": { "type": "string" },
+              "email": { "type": "string", "format": "email" },
+              "image": { "type": "string", "format": "uri" }
+            }
+          }
+        },
+        "total": { "type": "integer", "minimum": 1 },
+        "skip": { "type": "integer", "minimum": 0 },
+        "limit": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "mutation": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "deleted": {
+      "type": "object",
+      "required": ["id", "isDeleted", "deletedOn"],
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 },
+        "isDeleted": { "const": true },
+        "deletedOn": { "type": "string", "format": "date-time" }
+      }
+    },
+    "error": {
+      "type": "object",
+      "required": ["message"],
+      "properties": {
+        "message": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

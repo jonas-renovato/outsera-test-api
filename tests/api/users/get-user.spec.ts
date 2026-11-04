@@ -9,10 +9,8 @@ test.describe('GET /users/:id', () => {
     // Arrange: define a massa conhecida disponibilizada pela DummyJSON.
     const { existingUser, existingUserId } = usersData;
 
-    // Act: consulta o recurso pelo client de usuários.
     const response = await usersClient.getUser(existingUserId);
 
-    // Assert: valida sucesso HTTP, contrato e os dados estáveis do usuário.
     expectJsonResponse(response, 200);
     const body = (await response.json()) as User;
     expectSchema(body, 'user');
@@ -23,10 +21,8 @@ test.describe('GET /users/:id', () => {
     // Arrange: define um ID fora da massa pública disponibilizada pela DummyJSON.
     const { nonexistentUserId, nonexistentUserMessage } = usersData;
 
-    // Act: consulta um recurso que não existe.
     const response = await usersClient.getUser(nonexistentUserId);
 
-    // Assert: valida o contrato e a mensagem de recurso não encontrado.
     expectJsonResponse(response, 404);
     const body = (await response.json()) as ApiErrorResponse;
     expectSchema(body, 'userError');
@@ -34,10 +30,8 @@ test.describe('GET /users/:id', () => {
   });
 
   test('deve retornar 400 para um ID não numérico', async ({ usersClient }) => {
-    // Arrange: define um identificador inválido para o recurso de usuários.
     const { invalidUserId, invalidUserIdMessage } = usersData;
 
-    // Act: envia o identificador inválido sem tratá-lo localmente.
     const response = await usersClient.getUser(invalidUserId);
 
     // Assert: a DummyJSON valida o formato do ID e retorna o contrato de erro.
@@ -50,12 +44,8 @@ test.describe('GET /users/:id', () => {
   test('deve retornar a coleção de usuários quando o ID não é informado', async ({
     usersClient,
   }) => {
-    // Arrange: não informa um identificador de recurso para chamar /users.
-
-    // Act: solicita a rota de coleção.
     const response = await usersClient.getUsers();
 
-    // Assert: valida sucesso HTTP, contrato e a existência de usuários.
     expectJsonResponse(response, 200);
     const body = (await response.json()) as UsersListResponse;
     expectSchema(body, 'usersList');

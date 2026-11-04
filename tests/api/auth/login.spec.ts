@@ -25,36 +25,28 @@ test.describe('POST /auth/login', () => {
     // Arrange: usa as credenciais de demonstração válidas da DummyJSON.
     const credentials = authData.validCredentials;
 
-    // Act: envia as credenciais para o endpoint de autenticação.
     const response = await authClient.login(credentials);
 
     await test.step('Assert - valida a resposta de login bem-sucedido', async () => {
-      // Confirma sucesso HTTP, conteúdo JSON e o contrato da resposta.
       expectJsonResponse(response, 200);
       const body = (await response.json()) as LoginSuccessResponse;
       expectSchema(body, 'loginSuccess');
 
-      // Valida a identificação do usuário autenticado.
       expect(body.username).toBe(credentials.username);
     });
   });
 
   test('deve retornar erro ao autenticar sem senha', async ({ authClient }) => {
-    // Arrange: usa uma massa sem o campo obrigatório password.
     const credentials = authData.missingPasswordCredentials;
 
-    // Act: envia o payload incompleto.
     const response = await authClient.login(credentials);
 
-    // Assert: valida o comportamento padronizado de credenciais ausentes.
     await expectLoginError(response);
   });
 
   test('deve retornar erro ao autenticar sem username', async ({ authClient }) => {
-    // Arrange: usa uma massa sem o identificador do usuário.
     const credentials = authData.missingUsernameCredentials;
 
-    // Act: envia o payload incompleto.
     const response = await authClient.login(credentials);
 
     // Assert: a DummyJSON retorna a mesma mensagem para ausência de username ou password.
@@ -62,13 +54,10 @@ test.describe('POST /auth/login', () => {
   });
 
   test('deve retornar erro ao autenticar com payload vazio', async ({ authClient }) => {
-    // Arrange: usa uma massa sem campos de autenticação.
     const credentials = authData.emptyCredentials;
 
-    // Act: envia o objeto vazio ao endpoint de login.
     const response = await authClient.login(credentials);
 
-    // Assert: valida o comportamento observado para credenciais ausentes.
     await expectLoginError(response);
   });
 });
